@@ -123,7 +123,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 for (let i = 0; i < bufferLength; i++) {
                     barHeight = (dataArray[i] / 255) * rect.height;
 
-                    canvasCtx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                    // Neon Emerald Style (#2ecc71)
+                    canvasCtx.shadowBlur = 20;
+                    canvasCtx.shadowColor = '#2ecc71';
+                    canvasCtx.fillStyle = '#2ecc71';
+
                     canvasCtx.fillRect(x, rect.height - barHeight, barWidth, barHeight);
 
                     x += barWidth + 1;

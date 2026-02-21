@@ -1,354 +1,288 @@
 :root {
-    /* Palette inspired by Páramo de Mérida */
-    --color-moss-green: #4a5d23;
-    --color-stone-gray: #2c3e50;
-    --color-mist-white: #f0f4f8;
-    --color-deep-fog: #cfd8dc;
-    --color-dark-accent: #1a252f;
+    /* Palette: Páramo-Tech */
+    --color-emerald-neon: #2ecc71;
+    --color-emerald-glow: rgba(46, 204, 113, 0.6);
+    --color-deep-blue: #0a0e14;
+    --color-mist-white: rgba(255, 255, 255, 0.4);
 
     --glass-bg: rgba(255, 255, 255, 0.1);
     --glass-border: rgba(255, 255, 255, 0.2);
-    --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-
-    /* Text Colors */
-    --text-primary: var(--color-mist-white);
-    --text-secondary: rgba(255, 255, 255, 0.7);
-}
-
-/* Night Mode - Páramo Nocturno */
-body.night-mode {
-    --color-stone-gray: #0f151c;
-    --color-moss-green: #1a2634;
-    /* Darker, blue-ish green */
-    --glass-bg: rgba(5, 10, 20, 0.4);
-    --glass-border: rgba(100, 149, 237, 0.1);
-    background: linear-gradient(135deg, #0a0e14, #1b2735);
-}
-
-body.night-mode .mist-overlay {
-    background: radial-gradient(circle at 50% 50%, rgba(100, 149, 237, 0.05) 0%, transparent 60%);
+    --shadow-neon: 0 0 20px var(--color-emerald-glow);
 }
 
 body {
     margin: 0;
     padding: 0;
     font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(135deg, var(--color-stone-gray), var(--color-moss-green));
-    background-attachment: fixed;
-    /* Parallax-like feel */
-    color: var(--text-primary);
+    background-color: var(--color-deep-blue);
+    color: #fff;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
     align-items: center;
     justify-content: center;
     overflow-x: hidden;
-    transition: background 1s ease;
-    /* Smooth transition for dark mode */
 }
 
-/* Mist Overlay Effect */
+/* Background & Overlays */
+.background-parallax {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('fondo.jpg');
+    /* User will upload manually */
+    /* Note: generate_image saves as png by default or matching name */
+    background-size: cover;
+    background-position: center;
+    z-index: -3;
+    filter: brightness(0.7);
+}
+
+.dark-gradient-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(10, 14, 20, 0.8) 0%, transparent 50%, rgba(10, 14, 20, 0.8) 100%);
+    z-index: -2;
+}
+
+/* Animated Mist */
 .mist-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
-    pointer-events: none;
     z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.mist-cloud {
+    position: absolute;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    filter: blur(40px);
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: drift linear infinite;
+}
+
+.mist-cloud-1 {
+    width: 600px;
+    height: 300px;
+    top: 10%;
+    left: -20%;
+    animation-duration: 40s;
+}
+
+.mist-cloud-2 {
+    width: 800px;
+    height: 400px;
+    top: 50%;
+    left: -30%;
+    animation-duration: 60s;
+    animation-delay: -10s;
+}
+
+.mist-cloud-3 {
+    width: 500px;
+    height: 250px;
+    top: 30%;
+    left: 110%;
+    animation-duration: 50s;
+    animation-delay: -5s;
+    direction: reverse;
+}
+
+@keyframes drift {
+    from {
+        transform: translateX(0) scale(1);
+    }
+
+    to {
+        transform: translateX(150vw) scale(1.2);
+    }
 }
 
 /* Header */
 .main-header {
     text-align: center;
     margin-bottom: 2rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 10;
 }
 
 .main-header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 3rem;
-    margin: 0;
-    letter-spacing: 2px;
+    font-size: 3.5rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 0;
+    text-transform: uppercase;
 }
 
 .subtitle {
     font-size: 1.2rem;
     font-weight: 300;
-    letter-spacing: 1px;
-    opacity: 0.9;
-    margin-top: 0.5rem;
+    opacity: 0.8;
+    margin: 0;
 }
 
-/* Player Card - Glassmorphism */
+/* Glass Card */
 .player-container {
-    width: 100%;
-    max-width: 400px;
-    padding: 1rem;
-    margin-bottom: 60px;
-    /* Space for chat/footer */
+    width: 90%;
+    max-width: 420px;
+    z-index: 10;
 }
 
 .glass-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     border: 1px solid var(--glass-border);
-    padding: 2.5rem;
-    box-shadow: var(--shadow-soft);
-    text-align: center;
+    border-radius: 30px;
+    padding: 3rem 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     position: relative;
-    overflow: hidden;
-    transition: background 0.5s ease, border 0.5s ease;
+    text-align: center;
 }
 
-/* Live Indicator */
+/* Indicators */
 .live-indicator {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: 20px;
+    right: 25px;
     display: flex;
     align-items: center;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: #ff4d4d;
-    /* Red for live */
-    background: rgba(0, 0, 0, 0.2);
-    padding: 4px 8px;
-    border-radius: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
-.pulse {
+.pulse-red {
     width: 8px;
     height: 8px;
     background-color: #ff4d4d;
     border-radius: 50%;
-    margin-right: 6px;
+    margin-right: 8px;
+    box-shadow: 0 0 10px #ff4d4d;
     animation: pulse-animation 1.5s infinite;
 }
 
 @keyframes pulse-animation {
     0% {
         transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7);
+        opacity: 1;
     }
 
     70% {
-        transform: scale(1);
-        box-shadow: 0 0 0 6px rgba(255, 77, 77, 0);
+        transform: scale(1.2);
+        opacity: 0.5;
     }
 
     100% {
         transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(255, 77, 77, 0);
+        opacity: 1;
     }
 }
 
-/* Logo Area */
-.logo-area {
-    margin: 1.5rem 0 1rem 0;
+/* Controls */
+.controls {
+    margin: 2rem 0;
 }
 
-.logo-placeholder {
-    width: 120px;
-    height: 120px;
-    background: rgba(255, 255, 255, 0.1);
+.control-btn {
+    width: 80px;
+    height: 80px;
+    background: #fff;
+    color: var(--color-deep-blue);
+    border: none;
     border-radius: 50%;
-    margin: 0 auto;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem;
-    border: 2px solid var(--glass-border);
-    color: var(--color-mist-white);
+    margin: 0 auto;
 }
 
-/* Metadata Display */
-.metadata-display {
-    margin-bottom: 1.5rem;
-    min-height: 50px;
-}
-
-.song-title {
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin: 0;
-    color: var(--text-primary);
-}
-
-.song-artist {
-    font-size: 0.9rem;
-    margin: 5px 0 0 0;
-    color: var(--text-secondary);
+.control-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
 }
 
 /* Visualizer */
 #visualizer {
     width: 100%;
-    height: 60px;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    height: 80px;
     margin-top: 1.5rem;
-    margin-bottom: 0;
-    position: relative;
-    z-index: 5;
-}
-
-/* Controls */
-.controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.control-btn {
-    background: var(--color-mist-white);
-    color: var(--color-stone-gray);
-    border: none;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.control-btn:hover {
-    transform: scale(1.1);
-    background: #fff;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-}
-
-.volume-control {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 80%;
-}
-
-.volume-control i {
-    font-size: 1rem;
-    opacity: 0.8;
-}
-
-input[type=range] {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 3px;
-    outline: none;
-}
-
-input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: var(--color-mist-white);
-    cursor: pointer;
+    border-radius: 15px;
 }
 
 /* Footer */
 .main-footer {
-    margin-top: 2rem;
-    font-size: 0.9rem;
-    opacity: 0.7;
-    padding-bottom: 2rem;
+    margin-top: 3rem;
+    opacity: 0.6;
+    font-size: 0.8rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.brand-name {
-    font-weight: 600;
-    color: #aed581;
-    /* Lighter green for specific branding highlight */
-}
-
-/* Chat Container */
-/* Chat Container */
-.chat-container {
-    position: fixed;
-    bottom: 0;
-    left: auto;
-    /* Reset left */
-    right: 100px;
-    /* Position to the left of the WhatsApp button */
-    width: 300px;
-    background: rgba(44, 62, 80, 0.4);
-    /* Translucent base */
-    backdrop-filter: blur(15px) saturate(180%);
-    -webkit-backdrop-filter: blur(15px) saturate(180%);
-    border-radius: 12px 12px 0 0;
-    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-bottom: none;
-}
-
-.chat-container.collapsed {
-    transform: translateY(calc(100% - 40px));
-}
-
-.chat-header {
-    padding: 10px 15px;
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--color-mist-white);
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.chat-iframe-wrapper {
-    height: 350px;
-    background: #fff;
-    color: #333;
-}
-
-.chat-placeholder {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #f1f1f1;
-    color: #666;
-}
-
-/* WhatsApp Floating Button */
+/* WhatsApp */
 .whatsapp-btn {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 30px;
+    right: 30px;
     width: 60px;
     height: 60px;
-    background-color: #25d366;
-    color: white;
+    background: #25D366;
+    color: #fff;
     border-radius: 50%;
-    text-align: center;
-    font-size: 30px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    z-index: 1100;
-    /* Above the chat container */
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
-    text-decoration: none;
+    font-size: 1.8rem;
+    box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+    z-index: 1100;
+    transition: transform 0.3s ease;
 }
 
 .whatsapp-btn:hover {
     transform: scale(1.1);
+}
+
+/* Chat */
+.chat-container {
+    position: fixed;
+    bottom: 0;
+    right: 110px;
+    width: 320px;
+    background: rgba(10, 14, 20, 0.5);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: none;
+    border-radius: 15px 15px 0 0;
+    z-index: 1000;
+    transition: transform 0.5s ease;
+}
+
+.chat-container.collapsed {
+    transform: translateY(calc(100% - 45px));
+}
+
+.chat-header {
+    padding: 12px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 600;
 }
 
 /* Responsive */
@@ -357,9 +291,17 @@ input[type=range]::-webkit-slider-thumb {
         font-size: 2.2rem;
     }
 
+    .player-container {
+        width: 95%;
+    }
+
+    .glass-card {
+        padding: 2.5rem 1.5rem;
+    }
+
     .chat-container {
         width: 100%;
-        left: 0;
+        right: 0;
         border-radius: 0;
     }
 }
