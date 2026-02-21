@@ -24,18 +24,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Audio Control
     function togglePlay() {
+        // Initialize/Resume AudioContext on user interaction
+        if (!audioContext) {
+            initVisualizer();
+        }
+
+        if (audioContext && audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+
         if (isPlaying) {
             audio.pause();
             isPlaying = false;
             updatePlayButtonState();
         } else {
-            // Initialize AudioContext on first user interaction (browser policy)
-            if (!audioContext) {
-                initVisualizer();
-            } else if (audioContext.state === 'suspended') {
-                audioContext.resume();
-            }
-
             // Reload stream to be "live"
             audio.src = STREAM_URL;
             audio.load();
@@ -43,9 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
             audio.play().then(() => {
                 isPlaying = true;
                 updatePlayButtonState();
+                updateMediaSession();
+                // Ensure visualizer starts drawing
+                if (typeof draw === 'function') requestAnimationFrame(draw);
             }).catch(error => {
                 console.error("Error playing audio:", error);
-                alert("No se pudo iniciar la reproducción. Revisa la consola o tu conexión.");
+                alert("Conectando con el servidor del Páramo...");
             });
         }
     }
@@ -79,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 2. Audio Visualizer
+    let drawRequest;
     function initVisualizer() {
         try {
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -92,27 +98,33 @@ document.addEventListener('DOMContentLoaded', () => {
             const bufferLength = analyser.frequencyBinCount;
             const dataArray = new Uint8Array(bufferLength);
 
-            visualizerCanvas.width = visualizerCanvas.offsetWidth;
-            visualizerCanvas.height = visualizerCanvas.offsetHeight;
+            // DPI Scaling
+            const dpr = window.devicePixelRatio || 1;
+            const rect = visualizerCanvas.getBoundingClientRect();
+            visualizerCanvas.width = rect.width * dpr;
+            visualizerCanvas.height = rect.height * dpr;
+            canvasCtx.scale(dpr, dpr);
 
-            function draw() {
-                requestAnimationFrame(draw);
+            window.draw = function () {
+                if (!isPlaying) {
+                    cancelAnimationFrame(drawRequest);
+                    return;
+                }
+                drawRequest = requestAnimationFrame(draw);
 
                 analyser.getByteFrequencyData(dataArray);
 
-                canvasCtx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
+                canvasCtx.clearRect(0, 0, rect.width, rect.height);
 
-                // Style for the bars
-                const barWidth = (visualizerCanvas.width / bufferLength) * 2.5;
+                const barWidth = (rect.width / bufferLength) * 2.5;
                 let barHeight;
                 let x = 0;
 
                 for (let i = 0; i < bufferLength; i++) {
-                    barHeight = dataArray[i] / 2;
+                    barHeight = (dataArray[i] / 255) * rect.height;
 
-                    // Gradient or color based on theme could go here
                     canvasCtx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-                    canvasCtx.fillRect(x, visualizerCanvas.height - barHeight, barWidth, barHeight);
+                    canvasCtx.fillRect(x, rect.height - barHeight, barWidth, barHeight);
 
                     x += barWidth + 1;
                 }
@@ -120,7 +132,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
             draw();
         } catch (e) {
-            console.warn("Visualizer init failed (likely CORS or browser policy):", e);
+            console.warn("Visualizer init failed:", e);
+        }
+    }
+
+    // Media Session for Background Audio
+    function updateMediaSession() {
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: songTitleEl.textContent,
+                artist: songArtistEl.textContent,
+                album: 'Mufique Radio',
+                artwork: [
+                    { src: 'assets/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+                    { src: 'assets/icons/icon-512x512.png', sizes: '512x512', type: 'image/png' }
+                ]
+            });
+
+            navigator.mediaSession.setActionHandler('play', togglePlay);
+            navigator.mediaSession.setActionHandler('pause', togglePlay);
         }
     }
 
@@ -211,7 +241,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Event Listeners ---
-    playPauseBtn.addEventListener('click', togglePlay);
+    ['click', 'touchstart'].forEach(evt => {
+        playPauseBtn.addEventListener(evt, (e) => {
+            if (evt === 'touchstart') e.preventDefault();
+            togglePlay();
+        }, { passive: false });
+    });
     volumeSlider.addEventListener('input', (e) => {
         setVolume(e.target.value);
     });
