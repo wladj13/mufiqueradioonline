@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mufique Radio: La voz de Chachopo</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="mist-overlay"></div>
+
+    <header class="main-header">
+        <h1>Mufique Radio</h1>
+        <p class="subtitle">La voz de Chachopo</p>
+    </header>
+
+    <main class="player-container">
+        <div class="glass-card">
+            <div class="live-indicator">
+                <span class="pulse"></span> En Vivo
+            </div>
+
+            <div class="logo-area">
+                <div class="logo-placeholder">
+                    <i class="fa-solid fa-microphone-lines"></i>
+                    <!-- Img tag ready for future logo -->
+                    <!-- <img src="assets/images/logo.png" alt="Mufique Radio Logo"> -->
+                </div>
+            </div>
+
+            <div class="metadata-display">
+                <p id="song-title" class="song-title">Cargando...</p>
+                <p id="song-artist" class="song-artist">Sintonizando...</p>
+            </div>
+
+
+
+            <div class="controls">
+                <button id="play-pause-btn" class="control-btn play-btn" aria-label="Reproducir">
+                    <i class="fa-solid fa-play"></i>
+                </button>
+
+                <div class="volume-control">
+                    <i class="fa-solid fa-volume-high"></i>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.8">
+                </div>
+            </div>
+
+            <canvas id="visualizer"></canvas>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <p>Una producción de <span class="brand-name">Wladj Productions</span></p>
+    </footer>
+
+    <!-- Chat Container -->
+    <div id="chat-container" class="chat-container collapsed">
+        <div class="chat-header" onclick="toggleChat()">
+            <span>Chat de la Comunidad</span>
+            <i class="fa-solid fa-chevron-up" id="chat-toggle-icon"></i>
+        </div>
+        <div class="chat-iframe-wrapper">
+            <!-- Placeholder for xat.com embed code -->
+            <div class="chat-placeholder">
+                <p>Chat de Xat.com aquí</p>
+                <small>(Pega tu código embed aquí)</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/584120000000?text=Hola%20Wladj%2C%20estoy%20escuchando%20la%20radio%20desde%20el%20sitio%20web..."
+        class="whatsapp-btn" target="_blank" aria-label="Escríbenos al WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

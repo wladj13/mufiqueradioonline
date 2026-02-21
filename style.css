@@ -1,0 +1,363 @@
+:root {
+    /* Palette inspired by Páramo de Mérida */
+    --color-moss-green: #4a5d23;
+    --color-stone-gray: #2c3e50;
+    --color-mist-white: #f0f4f8;
+    --color-deep-fog: #cfd8dc;
+    --color-dark-accent: #1a252f;
+
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+
+    /* Text Colors */
+    --text-primary: var(--color-mist-white);
+    --text-secondary: rgba(255, 255, 255, 0.7);
+}
+
+/* Night Mode - Páramo Nocturno */
+body.night-mode {
+    --color-stone-gray: #0f151c;
+    --color-moss-green: #1a2634;
+    /* Darker, blue-ish green */
+    --glass-bg: rgba(5, 10, 20, 0.4);
+    --glass-border: rgba(100, 149, 237, 0.1);
+    background: linear-gradient(135deg, #0a0e14, #1b2735);
+}
+
+body.night-mode .mist-overlay {
+    background: radial-gradient(circle at 50% 50%, rgba(100, 149, 237, 0.05) 0%, transparent 60%);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, var(--color-stone-gray), var(--color-moss-green));
+    background-attachment: fixed;
+    /* Parallax-like feel */
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    transition: background 1s ease;
+    /* Smooth transition for dark mode */
+}
+
+/* Mist Overlay Effect */
+.mist-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Header */
+.main-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.main-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+    opacity: 0.9;
+    margin-top: 0.5rem;
+}
+
+/* Player Card - Glassmorphism */
+.player-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 1rem;
+    margin-bottom: 60px;
+    /* Space for chat/footer */
+}
+
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+    padding: 2.5rem;
+    box-shadow: var(--shadow-soft);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.5s ease, border 0.5s ease;
+}
+
+/* Live Indicator */
+.live-indicator {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #ff4d4d;
+    /* Red for live */
+    background: rgba(0, 0, 0, 0.2);
+    padding: 4px 8px;
+    border-radius: 12px;
+}
+
+.pulse {
+    width: 8px;
+    height: 8px;
+    background-color: #ff4d4d;
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: pulse-animation 1.5s infinite;
+}
+
+@keyframes pulse-animation {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(255, 77, 77, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(255, 77, 77, 0);
+    }
+}
+
+/* Logo Area */
+.logo-area {
+    margin: 1.5rem 0 1rem 0;
+}
+
+.logo-placeholder {
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    border: 2px solid var(--glass-border);
+    color: var(--color-mist-white);
+}
+
+/* Metadata Display */
+.metadata-display {
+    margin-bottom: 1.5rem;
+    min-height: 50px;
+}
+
+.song-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.song-artist {
+    font-size: 0.9rem;
+    margin: 5px 0 0 0;
+    color: var(--text-secondary);
+}
+
+/* Visualizer */
+#visualizer {
+    width: 100%;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.control-btn {
+    background: var(--color-mist-white);
+    color: var(--color-stone-gray);
+    border: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control-btn:hover {
+    transform: scale(1.1);
+    background: #fff;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 80%;
+}
+
+.volume-control i {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    outline: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-mist-white);
+    cursor: pointer;
+}
+
+/* Footer */
+.main-footer {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    padding-bottom: 2rem;
+}
+
+.brand-name {
+    font-weight: 600;
+    color: #aed581;
+    /* Lighter green for specific branding highlight */
+}
+
+/* Chat Container */
+/* Chat Container */
+.chat-container {
+    position: fixed;
+    bottom: 0;
+    left: auto;
+    /* Reset left */
+    right: 100px;
+    /* Position to the left of the WhatsApp button */
+    width: 300px;
+    background: rgba(44, 62, 80, 0.85);
+    /* Fallback / Semi-transparent base */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    /* Higher than WA button if needed, or similar */
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: none;
+}
+
+.chat-container.collapsed {
+    transform: translateY(calc(100% - 40px));
+}
+
+.chat-header {
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-mist-white);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.chat-iframe-wrapper {
+    height: 350px;
+    background: #fff;
+    color: #333;
+}
+
+.chat-placeholder {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f1f1f1;
+    color: #666;
+}
+
+/* WhatsApp Floating Button */
+.whatsapp-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: #25d366;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    text-decoration: none;
+}
+
+.whatsapp-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .main-header h1 {
+        font-size: 2.2rem;
+    }
+
+    .chat-container {
+        width: 100%;
+        left: 0;
+        border-radius: 0;
+    }
+}
